@@ -182,7 +182,7 @@ export default function Home() {
           ))}
         </div>
 
-        <div className="relative overflow-hidden my-[90px] text-center rounded-[34px] border border-pine-200">
+        <div className="relative overflow-hidden my-[90px] text-center rounded-[34px] border border-pine-200 bg-pine-100">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/cta-banner.jpg"
