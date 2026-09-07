@@ -117,14 +117,21 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Foto mobile+tablet: full-width nempel di bawah teks */}
-        <div className="lg:hidden w-[min(1180px,calc(100%-40px))] mx-auto -mt-4 pb-14">
+        {/* Foto mobile+tablet: full-bleed nempel di bawah teks */}
+        <div className="lg:hidden relative -mt-6">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/hero-skincare.jpg"
             alt="Skincare products with botanical leaves"
-            className="w-full h-[320px] md:h-[400px] object-cover rounded-[28px]"
+            className="w-full h-[380px] md:h-[440px] object-cover"
           />
+          <div className="absolute inset-0 bg-gradient-to-b from-mist via-transparent to-mist/90" />
+          <div className="absolute top-8 left-5 inline-flex items-center gap-2 bg-white/75 backdrop-blur rounded-full px-4 py-2 text-xs font-bold text-pine-800 shadow-[0_8px_24px_rgba(23,60,42,0.12)]">
+            <span className="w-[18px] h-[18px] grid place-items-center rounded-full bg-pine-800 text-white text-[11px]">
+              ✓
+            </span>
+            Tanpa login · langsung cari
+          </div>
         </div>
       </section>
 
