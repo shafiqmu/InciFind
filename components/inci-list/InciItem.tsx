@@ -28,7 +28,7 @@ export default function InciItem({ name, badges = [], context, functions = [], s
             setIsOpen(!isOpen);
           }
         }}
-        className="min-h-[72px] grid grid-cols-[1fr_40px] md:grid-cols-[1.3fr_1fr_1fr_45px] items-center gap-2 px-4 md:px-[22px] py-[14px] transition-colors hover:bg-[#fbfcfb] cursor-pointer"
+        className="min-h-[72px] grid grid-cols-[1fr_40px] lg:grid-cols-[1.3fr_1fr_1fr_45px] items-center gap-2 px-4 lg:px-[22px] py-[14px] transition-colors hover:bg-[#fbfcfb] cursor-pointer"
       >
         <div className="text-[15px] font-bold">
           {name}
@@ -39,7 +39,7 @@ export default function InciItem({ name, badges = [], context, functions = [], s
           )}
         </div>
 
-        <div className="col-span-full md:col-span-1 flex flex-wrap gap-[5px] md:mt-0 -mt-1">
+        <div className="col-span-full lg:col-span-1 flex flex-wrap gap-[5px] lg:mt-0 -mt-1">
           {functions.slice(0, 4).map((fn) => (
             <span key={fn} className="px-2 py-[5px] text-pine-700 bg-pine-100 rounded-md text-[11px] font-semibold">
               {fn}
@@ -47,7 +47,7 @@ export default function InciItem({ name, badges = [], context, functions = [], s
           ))}
         </div>
 
-        <div className="hidden md:block text-ink-soft text-[13px] leading-[1.5]">
+        <div className="hidden lg:block text-ink-soft text-[13px] leading-[1.5]">
           {short || '—'}
         </div>
 
@@ -61,7 +61,7 @@ export default function InciItem({ name, badges = [], context, functions = [], s
       </div>
 
       {isOpen && detail && (
-        <div className="px-4 md:px-[22px] pb-5 text-ink-soft text-sm leading-[1.7]">
+        <div className="px-4 lg:px-[22px] pb-5 text-ink-soft text-sm leading-[1.7]">
           <div className="p-[17px] bg-pine-100 rounded-[14px]">
             <strong className="text-ink">Deskripsi</strong>
             <br />

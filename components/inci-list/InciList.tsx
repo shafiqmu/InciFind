@@ -52,7 +52,7 @@ export default function InciList({ ingredients }: InciListProps) {
       </div>
 
       <div className="overflow-hidden bg-white border border-line rounded-[24px] shadow-[0_4px_16px_rgba(23,60,42,0.05)]">
-        <div className="hidden md:grid grid-cols-[1.3fr_1fr_1fr_45px] px-[22px] py-4 bg-[#f8faf8] border-b border-line text-ink-muted text-xs font-extrabold uppercase tracking-[0.08em]">
+        <div className="hidden lg:grid grid-cols-[1.3fr_1fr_1fr_45px] px-[22px] py-4 bg-[#f8faf8] border-b border-line text-ink-muted text-xs font-extrabold uppercase tracking-[0.08em]">
           <div>Bahan</div>
           <div>Fungsi</div>
           <div>Deskripsi</div>

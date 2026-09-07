@@ -122,7 +122,7 @@ export default function Home() {
           <img
             src="/hero-skincare.jpg"
             alt="Skincare products with botanical leaves"
-            className="w-full h-72 object-cover rounded-[28px]"
+            className="w-full h-72 md:h-96 object-cover rounded-[28px]"
           />
         </div>
       </section>
