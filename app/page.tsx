@@ -81,6 +81,16 @@ export default function Home() {
     <main>
       {/* HERO */}
       <section className="relative">
+        {/* BG foto khusus mobile/tablet: di belakang tulisan */}
+        <div className="absolute inset-0 lg:hidden" aria-hidden="true">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/hero-skincare.jpg"
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-mist via-mist/80 to-mist" />
+        </div>
         <div className="relative w-[min(1180px,calc(100%-40px))] mx-auto grid lg:grid-cols-[1.05fr_0.95fr] gap-8 lg:gap-10 items-center lg:min-h-[650px] py-12 lg:py-[80px]">
           <div className="text-left">
             <div className="inline-flex items-center gap-2 mb-[22px] text-pine-800 text-xs font-extrabold tracking-[0.14em] uppercase">
@@ -114,45 +124,6 @@ export default function Home() {
               alt="Skincare products with botanical leaves"
               className="absolute inset-0 w-full h-full object-cover rounded-[34px] [mask-image:linear-gradient(to_right,transparent,black_18%)]"
             />
-            <div className="absolute right-5 top-8 w-[228px] rounded-2xl bg-white/70 backdrop-blur-md border border-white/60 shadow-[0_18px_50px_rgba(23,60,42,0.15)] p-4">
-              <p className="font-serif text-pine-900 text-[17px] leading-snug mb-3">
-                Penasaran isi skincare-mu?
-              </p>
-              {['Pilihan lebih bersih', 'Kulit lebih sehat', 'Makin tahu'].map((t) => (
-                <div key={t} className="flex items-center gap-2 py-1 text-[11px] font-bold text-pine-800 uppercase tracking-wide">
-                  <span className="w-[18px] h-[18px] grid place-items-center rounded-full bg-pine-100 text-pine-700 text-[10px] shrink-0">
-                    ✓
-                  </span>
-                  {t}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Foto mobile+tablet: full-bleed nempel di bawah teks */}
-        <div className="lg:hidden relative -mt-6">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/hero-skincare.jpg"
-            alt="Skincare products with botanical leaves"
-            className="w-full h-[380px] md:h-[440px] object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-mist via-mist/30 to-mist/90" />
-          <div className="absolute bottom-5 inset-x-5 rounded-2xl bg-white/70 backdrop-blur-md border border-white/60 shadow-[0_18px_50px_rgba(23,60,42,0.15)] p-4">
-            <p className="font-serif text-pine-900 text-lg leading-snug mb-2">
-              Penasaran isi skincare-mu?
-            </p>
-            <div className="flex flex-wrap gap-x-4 gap-y-1">
-              {['Pilihan lebih bersih', 'Kulit lebih sehat', 'Makin tahu'].map((t) => (
-                <div key={t} className="flex items-center gap-1.5 py-0.5 text-[11px] font-bold text-pine-800 uppercase tracking-wide">
-                  <span className="w-[18px] h-[18px] grid place-items-center rounded-full bg-pine-100 text-pine-700 text-[10px] shrink-0">
-                    ✓
-                  </span>
-                  {t}
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </section>
