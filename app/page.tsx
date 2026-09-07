@@ -81,7 +81,17 @@ export default function Home() {
     <main>
       {/* HERO */}
       <section className="relative">
-        <div className="w-[min(1180px,calc(100%-40px))] mx-auto grid lg:grid-cols-[1.05fr_0.95fr] gap-10 items-center min-h-[650px] py-[70px] lg:py-[80px]">
+        {/* BG foto khusus mobile: di belakang tulisan */}
+        <div className="absolute inset-0 lg:hidden" aria-hidden="true">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/hero-skincare.jpg"
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-mist via-mist/85 to-mist" />
+        </div>
+        <div className="relative w-[min(1180px,calc(100%-40px))] mx-auto grid lg:grid-cols-[1.05fr_0.95fr] gap-10 items-center min-h-[650px] py-[70px] lg:py-[80px]">
           <div className="text-left">
             <div className="inline-flex items-center gap-2 mb-[22px] text-pine-800 text-xs font-extrabold tracking-[0.14em] uppercase">
               <span className="w-[7px] h-[7px] bg-pine-600 rounded-full" />
@@ -115,15 +125,6 @@ export default function Home() {
               className="absolute inset-0 w-full h-full object-cover rounded-[34px] [mask-image:linear-gradient(to_right,transparent,black_18%)]"
             />
           </div>
-        </div>
-
-        <div className="lg:hidden w-[min(1180px,calc(100%-40px))] mx-auto pb-[60px]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/hero-skincare.jpg"
-            alt="Skincare products with botanical leaves"
-            className="w-full h-72 md:h-96 object-cover rounded-[28px]"
-          />
         </div>
       </section>
 
