@@ -92,7 +92,13 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-b from-mist/60 via-mist/25 to-mist/85" />
         </div>
         <div className="relative w-[min(1180px,calc(100%-40px))] mx-auto grid lg:grid-cols-[1.05fr_0.95fr] gap-8 lg:gap-10 items-center lg:min-h-[650px] py-12 lg:py-[80px]">
-          <div className="text-left">
+          <div className="relative text-left">
+            {/* Scrim lembut khusus mobile/tablet: teks tajam, foto tetap nongol */}
+            <div
+              aria-hidden="true"
+              className="absolute -inset-x-4 -inset-y-6 lg:hidden bg-mist/60 blur-2xl rounded-[32px]"
+            />
+            <div className="relative">
             <div className="inline-flex items-center gap-2 mb-[22px] text-pine-800 text-xs font-extrabold tracking-[0.14em] uppercase">
               <span className="w-[7px] h-[7px] bg-pine-600 rounded-full" />
               Bahan skincare, dibuat simpel
@@ -114,6 +120,7 @@ export default function Home() {
 
             <div className="max-w-[560px]">
               <SearchBar suggestions={SUGGESTIONS} align="start" />
+            </div>
             </div>
           </div>
 
