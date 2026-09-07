@@ -1,0 +1,272 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 300ms ease-out;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+:focus-visible {
+  outline: 2px solid #A8B8A8;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =========================
+   HERO VISUAL (CSS art)
+========================= */
+
+.hero-visual {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 34px;
+  background:
+    radial-gradient(circle at 50% 38%, #ffffff 0%, #eef4ee 55%, #e2ece1 100%);
+  border: 1px solid #e5e9e3;
+}
+
+.hero-glow {
+  position: absolute;
+  width: 70%;
+  height: 55%;
+  left: 15%;
+  top: 8%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.9), transparent 70%);
+}
+
+/* ---- leaves ---- */
+
+.leaf {
+  position: absolute;
+  background: linear-gradient(135deg, #3d8a61 0%, #1e563b 70%);
+  border-radius: 100% 4px 100% 4px;
+  box-shadow: inset -6px -8px 14px rgba(22, 60, 42, 0.35);
+}
+
+.leaf-1 {
+  width: 90px;
+  height: 150px;
+  left: 4%;
+  top: 4%;
+  transform: rotate(-24deg);
+}
+
+.leaf-2 {
+  width: 70px;
+  height: 120px;
+  right: 6%;
+  top: 12%;
+  transform: rotate(28deg);
+}
+
+.leaf-3 {
+  width: 56px;
+  height: 96px;
+  left: 42%;
+  bottom: 4%;
+  transform: rotate(-8deg);
+}
+
+/* ---- bubbles ---- */
+
+.glass-bubble {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.15) 60%);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 12px rgba(23, 60, 42, 0.08);
+}
+
+.bubble-1 { width: 26px; height: 26px; left: 30%; top: 18%; }
+.bubble-2 { width: 16px; height: 16px; left: 58%; top: 10%; }
+.bubble-3 { width: 34px; height: 34px; right: 22%; bottom: 30%; }
+
+/* ---- lab glass (erlenmeyer) ---- */
+
+.lab-glass {
+  position: absolute;
+  left: 6%;
+  bottom: 9%;
+  width: 130px;
+  height: 220px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.18));
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  clip-path: polygon(32% 0, 68% 0, 68% 30%, 100% 100%, 0 100%, 32% 30%);
+}
+
+.lab-glass .water {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 42%;
+  background: linear-gradient(180deg, rgba(61, 138, 97, 0.25), rgba(61, 138, 97, 0.45));
+}
+
+.lab-glass .stem {
+  position: absolute;
+  left: 50%;
+  top: -6%;
+  width: 6px;
+  height: 80%;
+  background: linear-gradient(180deg, #3d8a61, #1e563b);
+  border-radius: 4px;
+  transform: translateX(-50%) rotate(10deg);
+}
+
+/* ---- serum bottle ---- */
+
+.serum-bottle {
+  position: absolute;
+  left: 40%;
+  bottom: 8%;
+  width: 104px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  filter: drop-shadow(0 18px 24px rgba(24, 43, 34, 0.22));
+}
+
+.serum-bottle .dropper-top {
+  width: 34px;
+  height: 44px;
+  background: linear-gradient(180deg, #ffffff, #dfe5df);
+  border-radius: 16px 16px 6px 6px;
+  border: 1px solid rgba(23, 60, 42, 0.12);
+}
+
+.serum-bottle .dropper-neck {
+  width: 22px;
+  height: 16px;
+  background: linear-gradient(90deg, #9aa39d, #e8ece8, #9aa39d);
+}
+
+.serum-bottle .bottle-body {
+  width: 104px;
+  height: 210px;
+  background: linear-gradient(90deg, #f3efe4 0%, #ffffff 25%, #fbf8ef 55%, #e7e0cd 100%);
+  border: 1px solid rgba(23, 60, 42, 0.1);
+  border-radius: 14px 14px 20px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.serum-bottle .bottle-label {
+  text-align: center;
+  color: #1e563b;
+  line-height: 1.5;
+}
+
+.serum-bottle .bottle-label span {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+}
+
+.serum-bottle .bottle-label strong {
+  display: block;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+}
+
+/* ---- cream jar ---- */
+
+.cream-jar {
+  position: absolute;
+  right: 7%;
+  bottom: 10%;
+  width: 150px;
+  filter: drop-shadow(0 18px 24px rgba(24, 43, 34, 0.2));
+}
+
+.cream-jar .jar-lid {
+  width: 150px;
+  height: 34px;
+  background: linear-gradient(180deg, #ffffff, #e3e8e3);
+  border: 1px solid rgba(23, 60, 42, 0.1);
+  border-radius: 12px 12px 6px 6px;
+  margin-bottom: -6px;
+  position: relative;
+  z-index: 2;
+}
+
+.cream-jar .jar-body {
+  width: 150px;
+  height: 120px;
+  background: linear-gradient(90deg, #f3efe6 0%, #ffffff 30%, #faf6ec 60%, #e6dfcc 100%);
+  border: 1px solid rgba(23, 60, 42, 0.1);
+  border-radius: 10px 10px 22px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cream-jar .jar-label {
+  text-align: center;
+  color: #1e563b;
+  line-height: 1.5;
+}
+
+.cream-jar .jar-label span {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+}
+
+.cream-jar .jar-label strong {
+  display: block;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+}
+
+/* ---- cream swatch ---- */
+
+.cream-swatch {
+  position: absolute;
+  right: 30%;
+  bottom: 5%;
+  width: 90px;
+  height: 46px;
+}
+
+.cream-swatch div {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #ffffff, #f1ece0);
+  border-radius: 50% 50% 46% 46% / 90% 90% 30% 30%;
+  box-shadow: 0 8px 16px rgba(24, 43, 34, 0.12);
+  transform: rotate(-6deg);
+}
+
+@media (max-width: 480px) {
+  .lab-glass { transform: scale(0.8); transform-origin: bottom left; }
+  .serum-bottle { transform: scale(0.85); transform-origin: bottom center; }
+  .cream-jar { transform: scale(0.85); transform-origin: bottom right; }
+}
