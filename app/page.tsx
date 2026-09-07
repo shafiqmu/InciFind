@@ -89,7 +89,7 @@ export default function Home() {
             alt=""
             className="absolute inset-0 w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-mist via-mist/80 to-mist" />
+          <div className="absolute inset-0 bg-gradient-to-b from-mist/60 via-mist/25 to-mist/85" />
         </div>
         <div className="relative w-[min(1180px,calc(100%-40px))] mx-auto grid lg:grid-cols-[1.05fr_0.95fr] gap-8 lg:gap-10 items-center lg:min-h-[650px] py-12 lg:py-[80px]">
           <div className="text-left">
