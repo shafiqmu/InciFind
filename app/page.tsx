@@ -1,5 +1,6 @@
 import SearchBar from '@/components/search/SearchBar';
-import BrandShowcase from '@/components/home/BrandShowcase';
+import BrandStrip from '@/components/home/BrandStrip';
+import FeatureRow from '@/components/home/FeatureRow';
 
 const SUGGESTIONS = [
   { label: 'CeraVe', q: 'CeraVe' },
@@ -131,7 +132,8 @@ export default function Home() {
         </div>
       </section>
 
-      <BrandShowcase features={FEATURES} />
+      <BrandStrip />
+      <FeatureRow features={FEATURES} />
 
       {/* EDUCATION */}
       <section id="education" className="w-[min(1180px,calc(100%-40px))] mx-auto py-20 border-t border-line scroll-mt-20">
