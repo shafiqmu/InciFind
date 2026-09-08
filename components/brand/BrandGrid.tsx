@@ -136,7 +136,7 @@ export default function BrandGrid({ items }: BrandGridProps) {
                     src={p.imageUrl}
                     alt=""
                     loading="lazy"
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-contain bg-white"
                     onError={(e) => {
                       e.currentTarget.style.display = 'none';
                     }}

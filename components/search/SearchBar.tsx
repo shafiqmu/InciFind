@@ -187,7 +187,7 @@ export default function SearchBar({ suggestions = [], align = 'center' }: { sugg
                     src={product.imageUrl}
                     alt=""
                     loading="lazy"
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-contain"
                     onError={(e) => {
                       e.currentTarget.style.display = 'none';
                     }}
