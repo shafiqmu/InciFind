@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 
 interface BrandItem {
@@ -14,52 +14,64 @@ interface BrandGridProps {
   items: BrandItem[];
 }
 
+const PER_PAGE = 50;
 const CHUNK = 8;
 
 /**
- * Grid produk per brand + filter nama. Foto diisi progresif per chunk
- * supaya 200+ produk tidak menembak INKEE barengan (rate-limit).
+ * Paginasi client-side 50/hal + search di SEMUA nama.
+ * Foto diisi progresif (halaman aktif dulu) supaya tidak badai ke INKEE.
  */
 export default function BrandGrid({ items }: BrandGridProps) {
   const [q, setQ] = useState('');
+  const [page, setPage] = useState(1);
   const [list, setList] = useState<BrandItem[]>(items);
+  const attempted = useRef<Set<string>>(new Set());
+  const topRef = useRef<HTMLDivElement>(null);
 
+  const mergeMeta = (meta: Record<string, { imageUrl?: string; brand?: string }>) => {
+    setList((prev) =>
+      prev.map((p) =>
+        meta[p.slug]
+          ? {
+              ...p,
+              brand: p.brand || meta[p.slug].brand || p.brand,
+              imageUrl: p.imageUrl || meta[p.slug].imageUrl || p.imageUrl,
+            }
+          : p
+      )
+    );
+  };
+
+  const fillSlugs = async (slugs: string[], cancelled: () => boolean) => {
+    const fresh = slugs.filter((s) => !attempted.current.has(s));
+    for (let i = 0; i < fresh.length; i += CHUNK) {
+      if (cancelled()) return;
+      const chunk = fresh.slice(i, i + CHUNK);
+      chunk.forEach((s) => attempted.current.add(s));
+      try {
+        const res = await fetch(`/api/product-meta?slugs=${encodeURIComponent(chunk.join(','))}`);
+        const data = await res.json();
+        if (cancelled()) return;
+        mergeMeta((data?.meta || {}) as Record<string, { imageUrl?: string; brand?: string }>);
+      } catch {
+        // Chunk gagal → dilewati, dicoba lagi di kunjungan berikut.
+      }
+      await new Promise((r) => setTimeout(r, 400));
+    }
+  };
+
+  // Isi progresif: halaman 1 dulu, sisanya background.
   useEffect(() => {
     setList(items);
+    attempted.current = new Set();
     let cancelled = false;
-
-    const fill = async () => {
-      const missing = items.filter((p) => !p.imageUrl).map((p) => p.slug);
-      for (let i = 0; i < missing.length; i += CHUNK) {
-        if (cancelled) return;
-        const chunk = missing.slice(i, i + CHUNK);
-        try {
-          const res = await fetch(`/api/product-meta?slugs=${encodeURIComponent(chunk.join(','))}`);
-          const data = await res.json();
-          const meta = (data?.meta || {}) as Record<string, { imageUrl?: string; brand?: string }>;
-          if (cancelled) return;
-          setList((prev) =>
-            prev.map((p) =>
-              meta[p.slug]
-                ? {
-                    ...p,
-                    brand: p.brand || meta[p.slug].brand || p.brand,
-                    imageUrl: p.imageUrl || meta[p.slug].imageUrl || p.imageUrl,
-                  }
-                : p
-            )
-          );
-        } catch {
-          // Chunk gagal → dilewati, bukan vonis. Coba lagi di kunjungan berikut.
-        }
-        await new Promise((r) => setTimeout(r, 400));
-      }
-    };
-
-    void fill();
+    const first = items.slice(0, PER_PAGE).map((p) => p.slug);
+    const rest = items.slice(PER_PAGE).map((p) => p.slug);
+    void fillSlugs([...first, ...rest], () => cancelled);
     return () => {
       cancelled = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items]);
 
   const query = q.trim().toLowerCase();
@@ -67,7 +79,22 @@ export default function BrandGrid({ items }: BrandGridProps) {
     ? list.filter((p) => p.name.toLowerCase().includes(query))
     : list;
 
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
+  const safePage = Math.min(page, totalPages);
+  const pageItems = filtered.slice((safePage - 1) * PER_PAGE, safePage * PER_PAGE);
+
+  const goPage = (p: number) => {
+    const next = Math.min(Math.max(1, p), totalPages);
+    setPage(next);
+    // Dahulukan foto halaman yang baru dibuka
+    const slugs = filtered.slice((next - 1) * PER_PAGE, next * PER_PAGE).map((x) => x.slug);
+    void fillSlugs(slugs, () => false);
+    topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   const initialOf = (name: string) => (name?.[0] || '?').toUpperCase();
+  const from = filtered.length === 0 ? 0 : (safePage - 1) * PER_PAGE + 1;
+  const to = Math.min(safePage * PER_PAGE, filtered.length);
 
   return (
     <div>
@@ -81,14 +108,19 @@ export default function BrandGrid({ items }: BrandGridProps) {
           placeholder="Cari produk brand ini..."
           aria-label="Cari produk brand ini"
           value={q}
-          onChange={(e) => setQ(e.target.value)}
+          onChange={(e) => {
+            setQ(e.target.value);
+            setPage(1);
+          }}
           className="w-full border-0 outline-0 text-ink bg-transparent text-base"
         />
       </label>
 
-      {filtered.length > 0 ? (
+      <div ref={topRef} className="scroll-mt-24" />
+
+      {pageItems.length > 0 ? (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {filtered.map((p) => (
+          {pageItems.map((p) => (
             <Link
               key={p.slug}
               href={`/products/${p.slug}`}
@@ -127,6 +159,35 @@ export default function BrandGrid({ items }: BrandGridProps) {
           Tidak ada produk yang cocok dengan pencarian.
         </p>
       )}
+
+      <div className="mt-8 flex items-center justify-between gap-3">
+        <p className="text-ink-soft text-[13px]">
+          {from}–{to} dari {filtered.length} produk
+        </p>
+        {totalPages > 1 && (
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              disabled={safePage <= 1}
+              onClick={() => goPage(safePage - 1)}
+              className="h-10 px-4 rounded-full border border-line bg-white text-sm font-bold text-pine-800 disabled:opacity-40 transition-all hover:border-pine-600"
+            >
+              ← Prev
+            </button>
+            <span className="text-[13px] font-bold text-ink-soft">
+              {safePage} / {totalPages}
+            </span>
+            <button
+              type="button"
+              disabled={safePage >= totalPages}
+              onClick={() => goPage(safePage + 1)}
+              className="h-10 px-4 rounded-full bg-pine-800 text-white text-sm font-bold disabled:opacity-40 transition-all hover:bg-pine-700"
+            >
+              Next →
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
