@@ -41,7 +41,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
     ? {
         name: inkee.name,
         brand: inkee.brand,
-        category: inkee.hashtags[0] || staticProduct?.category || 'Product',
+        brandSlug: inkee.brandSlug || '',
+        // Kategori HANYA dari data statis tepercaya — hashtag bukan jenis produk.
+        category: staticProduct?.category || '',
         description: inkee.description,
         imageUrl: inkee.imageUrl,
         inciList: inkee.inciList,
@@ -107,19 +109,33 @@ export default async function ProductPage({ params }: ProductPageProps) {
     keterbatasan: AI_LIMITATIONS,
   });
 
+  const brandSlug =
+    (product && 'brandSlug' in product ? (product as { brandSlug?: string }).brandSlug : '') || '';
+  const brandName = product.brand || 'Merek tidak dikenal';
+
   return (
     <main className="w-[min(1180px,calc(100%-40px))] mx-auto pt-10 md:pt-10 pb-[90px]">
-      <Link
-        href="/"
-        className="inline-flex items-center gap-2 mb-[35px] text-ink-soft text-[13px] font-semibold hover:text-pine-800"
-      >
-        ← Kembali ke pencarian
-      </Link>
+      <nav className="flex items-center flex-wrap gap-2 mb-[35px] text-ink-soft text-[13px] font-semibold">
+        <Link href="/" className="hover:text-pine-800">
+          Beranda
+        </Link>
+        <span className="text-ink-muted">/</span>
+        {brandSlug ? (
+          <Link href={`/brands/${brandSlug}`} className="hover:text-pine-800">
+            {brandName}
+          </Link>
+        ) : (
+          <span>{brandName}</span>
+        )}
+        <span className="text-ink-muted">/</span>
+        <span className="text-ink">{product.name || 'Produk'}</span>
+      </nav>
 
       <ProductHero
         name={product.name || 'Produk'}
-        brand={product.brand || 'Merek tidak dikenal'}
-        category={product.category || 'Produk'}
+        brand={brandName}
+        brandSlug={brandSlug}
+        category={product.category || ''}
         imageUrl={product.imageUrl || ''}
         ingredientCount={(product.inciList || []).length}
       />

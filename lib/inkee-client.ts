@@ -31,6 +31,7 @@ export interface LocalProductCard {
   slug: string;
   name: string;
   brand: string;
+  brandSlug: string;
   category: string;
   description: string;
   imageUrl: string;
@@ -66,6 +67,7 @@ function cardFromRef(ref: { name: string; slug: string }): LocalProductCard {
     slug: ref.slug,
     name: ref.name,
     brand: '',
+    brandSlug: '',
     category: '',
     description: '',
     imageUrl: '',
@@ -153,6 +155,7 @@ async function detailFromInkee(p: InkeeProduct): Promise<InkeeDetail> {
     slug: p.slug,
     name: p.fullName || p.name,
     brand: p.brand?.name || '',
+    brandSlug: p.brand?.slug || '',
     category: '',
     description: p.description || '',
     imageUrl: p.images?.original || '',
@@ -207,6 +210,44 @@ export async function searchInkee(
   } catch (err) {
     console.error('[INKEE] search_products error', { q, error: err instanceof Error ? err.message : String(err) });
     throw err;
+  }
+}
+
+// ---- Brand: daftar produk per merek (untuk /brands/[slug]) ----
+export interface InkeeBrandListing {
+  slug: string;
+  name: string;
+  products: Array<{ slug: string; name: string }>;
+  hasMore: boolean;
+}
+
+export async function getInkeeBrand(slug: string): Promise<InkeeBrandListing | null> {
+  const s = slug.trim();
+  if (!s) return null;
+  const key = cacheKey(['inkee', 'brand', s]);
+  const cache = memoryCache(key);
+  const hit = cache.get() as InkeeBrandListing | null;
+  if (hit) return hit;
+
+  try {
+    const client = getClient();
+    const b = await client.getBrand(s);
+    if (!b || !b.slug) {
+      console.warn('[INKEE] get_brand empty', { slug: s });
+      return null;
+    }
+    const out: InkeeBrandListing = {
+      slug: b.slug,
+      name: b.name,
+      products: (b.products?.items || []).map((r) => ({ slug: r.slug, name: r.name })),
+      hasMore: b.products?.hasMore || false,
+    };
+    cache.set(out);
+    console.info('[INKEE] get_brand success', { slug: s, count: out.products.length });
+    return out;
+  } catch (err) {
+    console.error('[INKEE] get_brand error', { slug: s, error: err instanceof Error ? err.message : String(err) });
+    return null;
   }
 }
 

@@ -1,12 +1,15 @@
+import Link from 'next/link';
+
 interface ProductHeroProps {
   name: string;
   brand: string;
+  brandSlug?: string;
   category: string;
   imageUrl: string;
   ingredientCount: number;
 }
 
-export default function ProductHero({ name, brand, category, imageUrl, ingredientCount }: ProductHeroProps) {
+export default function ProductHero({ name, brand, brandSlug = '', category, imageUrl, ingredientCount }: ProductHeroProps) {
   return (
     <section className="grid lg:grid-cols-[0.9fr_1.1fr] gap-10 lg:gap-[70px] items-center mb-[60px]">
       <div className="min-h-[390px] md:min-h-[550px] grid place-items-center relative rounded-[34px] bg-[radial-gradient(circle_at_50%_40%,#ffffff_0%,#eef4ee_55%,#e5eee4_100%)] border border-line overflow-hidden p-8">
@@ -21,7 +24,13 @@ export default function ProductHero({ name, brand, category, imageUrl, ingredien
 
       <div>
         <div className="text-pine-700 text-[13px] font-extrabold uppercase tracking-[0.12em] mb-[10px]">
-          {brand}
+          {brandSlug ? (
+            <Link href={`/brands/${brandSlug}`} className="hover:underline">
+              {brand}
+            </Link>
+          ) : (
+            brand
+          )}
         </div>
         <h1 className="max-w-[650px] font-serif text-[clamp(42px,5vw,66px)] leading-[0.98] tracking-[-0.055em] text-pine-900 mb-[22px]">
           {name}
@@ -34,12 +43,22 @@ export default function ProductHero({ name, brand, category, imageUrl, ingredien
         <div className="flex flex-wrap gap-[10px]">
           <div className="px-4 py-3 bg-white border border-line rounded-[14px] text-xs">
             <span className="block mb-[3px] text-ink-muted">Merek</span>
-            <strong className="text-[13px]">{brand}</strong>
+            <strong className="text-[13px]">
+              {brandSlug ? (
+                <Link href={`/brands/${brandSlug}`} className="hover:text-pine-800 hover:underline">
+                  {brand}
+                </Link>
+              ) : (
+                brand
+              )}
+            </strong>
           </div>
+          {category && (
           <div className="px-4 py-3 bg-white border border-line rounded-[14px] text-xs">
             <span className="block mb-[3px] text-ink-muted">Jenis produk</span>
             <strong className="text-[13px]">{category}</strong>
           </div>
+          )}
           <div className="px-4 py-3 bg-white border border-line rounded-[14px] text-xs">
             <span className="block mb-[3px] text-ink-muted">Bahan</span>
             <strong className="text-[13px]">{ingredientCount} terdaftar</strong>
