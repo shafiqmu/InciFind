@@ -15,6 +15,7 @@ export default function Footer() {
             <p className="mt-[6px] text-ink-muted text-xs">Bahan skincare, dibuat simpel.</p>
           </div>
           <nav className="flex flex-wrap gap-x-[25px] gap-y-2 text-ink-soft text-[13px] font-semibold" aria-label="Footer">
+            <Link href="/articles" className="hover:text-pine-800">Artikel</Link>
             <Link href="/about" className="hover:text-pine-800">About</Link>
             <Link href="/about#data" className="hover:text-pine-800">Data</Link>
             <Link href="/about#disclaimer" className="hover:text-pine-800">Disclaimer</Link>
@@ -22,8 +23,12 @@ export default function Footer() {
         </div>
         <div className="pt-5 border-t border-line/70 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
           <p className="text-ink-muted text-xs">© 2026 InciFind. Untuk edukasi, bukan nasihat medis.</p>
-          <p className="text-ink-muted text-xs">
-            Powered by <span className="font-bold text-pine-800">Shafiq</span>
+          <p className="text-ink-muted text-xs flex gap-4">
+            <Link href="/privacy" className="hover:text-pine-800">Privasi</Link>
+            <Link href="/terms" className="hover:text-pine-800">Ketentuan</Link>
+            <span>
+              Powered by <span className="font-bold text-pine-800">Shafiq</span>
+            </span>
           </p>
         </div>
       </div>

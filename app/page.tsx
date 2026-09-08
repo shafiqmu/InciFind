@@ -1,12 +1,14 @@
+import Link from 'next/link';
 import SearchBar from '@/components/search/SearchBar';
 import BrandStrip from '@/components/home/BrandStrip';
 import FeatureRow from '@/components/home/FeatureRow';
+import { ARTICLES } from '@/lib/articles';
 
 const SUGGESTIONS = [
   { label: 'CeraVe', q: 'CeraVe' },
-  { label: 'COSRX Snail 96', q: 'COSRX snail' },
-  { label: 'The Ordinary', q: 'The Ordinary' },
   { label: 'SKIN1004', q: 'SKIN1004' },
+  { label: 'Niacinamide', q: 'Niacinamide' },
+  { label: 'Sunscreen', q: 'Sunscreen' },
 ];
 
 const FEATURES = [
@@ -55,29 +57,6 @@ const FEATURES = [
   },
 ];
 
-const EDUCATION = [
-  {
-    n: '01',
-    title: 'Apa itu Niacinamide?',
-    desc: 'Vitamin B3 yang populer untuk barrier kulit dan mencerahkan.',
-  },
-  {
-    n: '02',
-    title: 'Retinol itu buat apa?',
-    desc: 'Retinoid yang umum dipakai untuk regenerasi kulit.',
-  },
-  {
-    n: '03',
-    title: 'Kenapa ada Fragrance?',
-    desc: 'Pewangi bikin produk enak dipakai, tapi belum tentu cocok untuk semua kulit.',
-  },
-  {
-    n: '04',
-    title: 'Apa itu daftar INCI?',
-    desc: 'INCI adalah sistem penamaan bahan standar di label kosmetik.',
-  },
-];
-
 export default function Home() {
   return (
     <main>
@@ -87,7 +66,7 @@ export default function Home() {
         <div className="absolute inset-0 lg:hidden" aria-hidden="true">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/hero-skincare.jpg"
+            src="/images/home/hero.jpg"
             alt=""
             className="absolute inset-0 w-full h-full object-cover"
           />
@@ -111,8 +90,8 @@ export default function Home() {
             </h1>
 
             <p className="max-w-[520px] text-ink font-medium text-[16px] md:text-[17px] lg:font-normal lg:text-ink-soft leading-[1.7] mb-10 [text-shadow:0_1px_14px_rgba(247,248,243,1),0_0_8px_rgba(247,248,243,1)] lg:[text-shadow:none]">
-              Cari produk skincare apa pun dan temukan daftar bahan lengkap,
-              bahan aktif, dan insight simpel. Tanpa login. Cukup tahu.
+              Cari produk, lihat daftar bahan (INCI), dan pahami fungsinya
+              — semua dalam satu tempat.
             </p>
 
             <div className="max-w-[560px]">
@@ -124,9 +103,9 @@ export default function Home() {
           <div className="relative hidden lg:block h-[600px]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/hero-skincare.jpg"
-              alt="Skincare products with botanical leaves"
-              className="absolute inset-0 w-full h-full object-cover rounded-[34px] [mask-image:linear-gradient(to_right,transparent,black_18%)]"
+              src="/images/home/hero.jpg"
+              alt="Cawan petri dan daun hijau"
+              className="absolute inset-0 w-full h-full object-cover object-right rounded-[34px] [mask-image:linear-gradient(to_right,transparent,black_18%)]"
             />
           </div>
         </div>
@@ -135,49 +114,93 @@ export default function Home() {
       <BrandStrip />
       <FeatureRow features={FEATURES} />
 
-      {/* EDUCATION */}
+      {/* EDUCATION → ARTIKEL */}
       <section id="education" className="w-[min(1180px,calc(100%-40px))] mx-auto py-20 border-t border-line scroll-mt-20">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-[30px] gap-4">
-          <h2 className="font-serif text-[34px] md:text-[42px] tracking-[-0.04em] text-pine-900 leading-tight">
-            Pahami Skincare-mu
-            <br />
-            Lebih Baik.
-          </h2>
-          <p className="max-w-[420px] text-ink-soft leading-[1.6] text-sm">
-            Sedikit pengetahuan bahan bikin label skincare jauh lebih gampang dimengerti.
-          </p>
+          <div>
+            <span className="text-pine-700 text-xs font-extrabold tracking-[0.14em] uppercase">
+              Belajar soal skincare
+            </span>
+            <h2 className="mt-[14px] font-serif text-[34px] md:text-[42px] tracking-[-0.04em] text-pine-900 leading-tight">
+              Pahami Skincare-mu
+              <br />
+              Lebih Baik.
+            </h2>
+          </div>
+          <Link
+            href="/articles"
+            className="inline-flex items-center gap-[6px] text-[13px] font-bold text-pine-800 underline underline-offset-4 hover:text-pine-700"
+          >
+            Lihat semua artikel
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M7 17 17 7"></path>
+              <path d="M7 7h10v10"></path>
+            </svg>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {EDUCATION.map((e) => (
-            <article
-              key={e.n}
-              className="min-h-[230px] flex flex-col justify-between p-6 rounded-[25px] overflow-hidden relative bg-white border border-line transition-transform hover:-translate-y-1"
+          {ARTICLES.map((a) => (
+            <Link
+              key={a.slug}
+              href={`/articles/${a.slug}`}
+              className="group overflow-hidden bg-white border border-line rounded-[20px] transition-all hover:-translate-y-1 hover:border-pine-600"
             >
-              <div className="w-[120px] h-[120px] absolute top-[-35px] right-[-25px] rounded-full bg-[radial-gradient(circle_at_40%_40%,rgba(255,255,255,0.8),rgba(215,235,216,0.4))]" />
-              <span className="text-pine-700 text-xs font-extrabold">{e.n}</span>
-              <div>
-                <h3 className="max-w-[180px] mt-auto mb-2 text-[20px] tracking-[-0.03em] font-bold">{e.title}</h3>
-                <p className="text-ink-soft text-[13px] leading-[1.5]">{e.desc}</p>
+              <div className="relative h-[180px] overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={a.image}
+                  alt=""
+                  loading="lazy"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
+                />
               </div>
-            </article>
+              <div className="p-5">
+                <span className="text-[10px] font-bold tracking-[0.14em] text-pine-700 uppercase">
+                  {a.category}
+                </span>
+                <h3 className="mt-[11px] mb-2 font-serif text-[20px] text-ink group-hover:text-pine-800">
+                  {a.title}
+                </h3>
+                <p className="text-ink-soft text-xs leading-[1.6]">{a.desc}</p>
+              </div>
+            </Link>
           ))}
         </div>
 
-        <div className="relative overflow-hidden my-[90px] text-center rounded-[34px] border border-pine-200 bg-pine-100">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/cta-banner.jpg"
-            alt="Pipet serum, tetesan, dan daun hijau"
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-          <div className="relative px-6 py-[70px] md:py-[90px] md:px-10">
-            <h2 className="font-serif text-pine-900 text-[36px] md:text-[46px] tracking-[-0.05em] mb-[14px] [text-shadow:0_2px_20px_rgba(255,255,255,0.9)]">
-              Makin tahu. Kulit makin sehat.
-            </h2>
-            <p className="max-w-[520px] mx-auto text-ink-soft leading-[1.7] [text-shadow:0_1px_12px_rgba(255,255,255,0.9)]">
-              Cari produk, pahami bahannya, dan pilih skincare dengan lebih yakin.
-            </p>
+        <div className="relative overflow-hidden my-[90px] rounded-[24px] border border-pine-200 bg-[#e7eee4]">
+          <div className="grid md:grid-cols-[1.1fr_0.9fr] items-center">
+            <div className="relative z-[2] px-6 py-[52px] md:p-[52px]">
+              <span className="text-pine-700 text-xs font-extrabold tracking-[0.14em] uppercase">
+                Jadikan skincare lebih transparan
+              </span>
+              <h2 className="mt-[15px] mb-3 font-serif text-pine-900 text-[34px] md:text-[42px] tracking-[-0.05em] leading-[1.05]">
+                Mulai Cari dan Pahami Produk Skincare-mu.
+              </h2>
+              <p className="max-w-[480px] text-ink-soft text-[13px] leading-[1.6]">
+                Mulai cari, pelajari, dan pahami produk skincare dengan informasi
+                yang bisa kamu percaya.
+              </p>
+              <Link
+                href="/search"
+                className="mt-[22px] inline-flex items-center gap-2 rounded-full bg-pine-800 px-5 py-3 text-white text-[13px] font-bold transition-all hover:bg-pine-700"
+              >
+                Mulai Sekarang
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M7 17 17 7"></path>
+                  <path d="M7 7h10v10"></path>
+                </svg>
+              </Link>
+            </div>
+            <div className="relative min-h-[220px] md:min-h-[320px]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/home/cta.jpg"
+                alt="Daun hijau"
+                loading="lazy"
+                className="absolute inset-0 w-full h-full object-cover md:rounded-r-[24px]"
+              />
+            </div>
           </div>
         </div>
       </section>
