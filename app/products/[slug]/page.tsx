@@ -54,7 +54,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   // Badge/warning pakai logic lokal (ingredientsReference + matchIngredients)
-  const { warnings, disclosures } = matchIngredients(product.inciList || []);
+  const { warnings } = matchIngredients(product.inciList || []);
 
   const funcMap = inkee?.functionsByIngredient || {};
   const longMap = inkee?.longDescByIngredient || {};
@@ -145,7 +145,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
       {/* BAHAN UTAMA (shortcut Rule Engine) */}
       <KeyIngredients items={formula.keyIngredients} />
 
-      {/* WARNINGS */}
+      {/* WARNINGS — hanya muncul kalau memang ada yang perlu diperhatikan */}
+      {warnings.length > 0 && (
       <section className="mb-[55px]">
         <article className="p-[22px] rounded-[20px] border bg-sun-bg border-[#f0df9c]">
           <div className="flex items-center gap-[11px] mb-[10px]">
@@ -154,30 +155,20 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </div>
             <h3 className="text-sm font-bold">Bahan yang Perlu Diperhatikan</h3>
           </div>
-          {warnings.length > 0 ? (
-            <ul className="pl-[42px] flex flex-wrap gap-[7px] list-none">
-              {warnings.map((w, idx) => (
-                <li
-                  key={idx}
-                  title={w.context}
-                  className="px-[9px] py-[6px] text-[#765d12] bg-white/65 border border-[#ead997] rounded-lg text-xs font-bold"
-                >
-                  {w.ingredient}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="pl-[42px] text-ink-soft text-[13px] leading-[1.6]">
-              Tidak ada bahan yang ditandai di daftar referensi kami.
-            </p>
-          )}
-          {disclosures.length > 0 && (
-            <p className="pl-[42px] mt-3 text-ink-soft text-[13px] leading-[1.6]">
-              {disclosures.length} catatan keterbatasan data — lihat detail bahan di bawah.
-            </p>
-          )}
+          <ul className="pl-[42px] flex flex-wrap gap-[7px] list-none">
+            {warnings.map((w, idx) => (
+              <li
+                key={idx}
+                title={w.context}
+                className="px-[9px] py-[6px] text-[#765d12] bg-white/65 border border-[#ead997] rounded-lg text-xs font-bold"
+              >
+                {w.ingredient}
+              </li>
+            ))}
+          </ul>
         </article>
       </section>
+      )}
 
       {/* INGREDIENTS */}
       <InciList ingredients={inciListWithBadges} />

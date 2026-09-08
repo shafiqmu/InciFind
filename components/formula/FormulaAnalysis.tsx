@@ -239,7 +239,7 @@ export default function FormulaAnalysis({
                   ))}
                 </ul>
                 <p className="text-xs text-ink-muted mt-3 leading-relaxed">
-                  Berdasarkan daftar bahan yang tersedia. Bukan nasihat medis.
+                  Berdasarkan daftar bahan yang tersedia.
                 </p>
               </section>
             </div>
