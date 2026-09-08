@@ -66,7 +66,7 @@ export async function getProductMetaMap(slugs: string[]): Promise<Record<string,
   const store = readStore();
   const out: Record<string, ProductMeta> = {};
   const missing = uniq.filter((s) => {
-    if (store[s]) {
+    if (store[s]?.imageUrl || store[s]?.brand) {
       out[s] = store[s];
       return false;
     }
@@ -75,28 +75,37 @@ export async function getProductMetaMap(slugs: string[]): Promise<Record<string,
 
   if (missing.length > 0) {
     const client = getMetaClient();
-    const fetched = await Promise.all(
-      missing.map(async (s): Promise<[string, ProductMeta]> => {
-        const mkey = cacheKey(['inkee', 'meta', s]);
-        const mc = memoryCache(mkey);
-        const hit = mc.get() as ProductMeta | null;
-        if (hit) return [s, hit];
-        try {
-          const p = await client.getProduct(s);
-          const meta: ProductMeta = {
-            imageUrl: p?.images?.original || '',
-            brand: (p?.brand as { name?: string } | undefined)?.name || '',
-          };
-          mc.set(meta);
-          return [s, meta];
-        } catch {
-          return [s, { imageUrl: '', brand: '' }];
-        }
-      })
-    );
-    for (const [s, m] of fetched) {
-      out[s] = m;
-      store[s] = m;
+    // Batch 3 paralel (sopan ke INKEE, hindari rate-limit burst)
+    for (let i = 0; i < missing.length; i += 3) {
+      const batch = missing.slice(i, i + 3);
+      const fetched = await Promise.all(
+        batch.map(async (s): Promise<[string, ProductMeta]> => {
+          const mkey = cacheKey(['inkee', 'meta', s]);
+          const mc = memoryCache(mkey);
+          const hit = mc.get() as ProductMeta | null;
+          if (hit && (hit.imageUrl || hit.brand)) return [s, hit];
+          try {
+            const p = await client.getProduct(s);
+            const meta: ProductMeta = {
+              imageUrl: p?.images?.original || '',
+              brand: (p?.brand as { name?: string } | undefined)?.name || '',
+            };
+            // Hasil kosong TIDAK di-cache permanen → dicoba lagi lain waktu.
+            if (meta.imageUrl || meta.brand) {
+              mc.set(meta);
+              return [s, meta];
+            }
+            return [s, { imageUrl: '', brand: '' }];
+          } catch {
+            return [s, { imageUrl: '', brand: '' }];
+          }
+        })
+      );
+      for (const [s, m] of fetched) {
+        out[s] = m;
+        // vonis permanen hanya untuk hasil berisi; yang kosong tetap bisa dicoba lagi
+        if (m.imageUrl || m.brand) store[s] = m;
+      }
     }
     writeStore();
   }

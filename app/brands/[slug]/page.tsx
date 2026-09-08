@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getInkeeBrand } from '../../../lib/inkee-client';
-import { getProductMetaMap } from '../../../lib/product-meta';
 import BrandGrid from '../../../components/brand/BrandGrid';
 
 interface BrandPageProps {
@@ -18,13 +17,11 @@ export default async function BrandPage({ params }: BrandPageProps) {
     notFound();
   }
 
-  // Enrichment foto (cache permanen, makin lama makin lengkap)
-  const meta = await getProductMetaMap(brand.products.map((p) => p.slug));
+  // Server hanya kirim nama+slug (cepat). Foto diisi progresif di client
+  // via /api/product-meta supaya first paint tidak nunggu ratusan fetch.
   const items = brand.products.map((p) => ({
     slug: p.slug,
     name: p.name,
-    brand: meta[p.slug]?.brand || '',
-    imageUrl: meta[p.slug]?.imageUrl || '',
   }));
 
   return (
@@ -43,7 +40,7 @@ export default async function BrandPage({ params }: BrandPageProps) {
         </h1>
         <p className="mt-3 text-ink-soft text-[15px]">
           Produk yang tersedia di InciFind · {brand.products.length} produk
-          {brand.hasMore ? '+' : ''}
+          {brand.hasMore ? ' atau lebih' : ''}
         </p>
       </div>
 

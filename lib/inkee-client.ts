@@ -231,7 +231,7 @@ export async function getInkeeBrand(slug: string): Promise<InkeeBrandListing | n
 
   try {
     const client = getClient();
-    const b = await client.getBrand(s);
+    const b = await client.getBrand(s, { allPages: true });
     if (!b || !b.slug) {
       console.warn('[INKEE] get_brand empty', { slug: s });
       return null;

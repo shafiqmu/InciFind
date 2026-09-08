@@ -1,23 +1,71 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
-interface BrandGridProps {
-  items: Array<{ slug: string; name: string; brand: string; imageUrl: string }>;
+interface BrandItem {
+  slug: string;
+  name: string;
+  brand?: string;
+  imageUrl?: string;
 }
 
+interface BrandGridProps {
+  items: BrandItem[];
+}
+
+const CHUNK = 8;
+
 /**
- * Grid produk per brand + filter nama. Foto dari cache product-meta
- * (produk yang belum ke-cache tampil huruf awal).
+ * Grid produk per brand + filter nama. Foto diisi progresif per chunk
+ * supaya 200+ produk tidak menembak INKEE barengan (rate-limit).
  */
 export default function BrandGrid({ items }: BrandGridProps) {
   const [q, setQ] = useState('');
+  const [list, setList] = useState<BrandItem[]>(items);
+
+  useEffect(() => {
+    setList(items);
+    let cancelled = false;
+
+    const fill = async () => {
+      const missing = items.filter((p) => !p.imageUrl).map((p) => p.slug);
+      for (let i = 0; i < missing.length; i += CHUNK) {
+        if (cancelled) return;
+        const chunk = missing.slice(i, i + CHUNK);
+        try {
+          const res = await fetch(`/api/product-meta?slugs=${encodeURIComponent(chunk.join(','))}`);
+          const data = await res.json();
+          const meta = (data?.meta || {}) as Record<string, { imageUrl?: string; brand?: string }>;
+          if (cancelled) return;
+          setList((prev) =>
+            prev.map((p) =>
+              meta[p.slug]
+                ? {
+                    ...p,
+                    brand: p.brand || meta[p.slug].brand || p.brand,
+                    imageUrl: p.imageUrl || meta[p.slug].imageUrl || p.imageUrl,
+                  }
+                : p
+            )
+          );
+        } catch {
+          // Chunk gagal → dilewati, bukan vonis. Coba lagi di kunjungan berikut.
+        }
+        await new Promise((r) => setTimeout(r, 400));
+      }
+    };
+
+    void fill();
+    return () => {
+      cancelled = true;
+    };
+  }, [items]);
 
   const query = q.trim().toLowerCase();
   const filtered = query
-    ? items.filter((p) => p.name.toLowerCase().includes(query))
-    : items;
+    ? list.filter((p) => p.name.toLowerCase().includes(query))
+    : list;
 
   const initialOf = (name: string) => (name?.[0] || '?').toUpperCase();
 
