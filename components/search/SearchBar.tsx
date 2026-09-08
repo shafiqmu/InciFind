@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Product } from '@/lib/ingredients-client';
 import Link from 'next/link';
@@ -16,9 +16,28 @@ export default function SearchBar({ suggestions = [], align = 'center' }: { sugg
   const [results, setResults] = useState<Product[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const searchController = useRef<AbortController | null>(null);
+  const searchSeq = useRef(0);
 
-  const runSearch = async (value: string) => {
+  // P0-4: ketikan di-debounce 350ms → 1 request per settle, bukan per huruf.
+  const handleChange = (value: string) => {
     setQuery(value);
+    if (debounceTimer.current) clearTimeout(debounceTimer.current);
+    if (!value.trim()) {
+      searchController.current?.abort();
+      setResults([]);
+      setIsOpen(false);
+      setLoading(false);
+      return;
+    }
+    debounceTimer.current = setTimeout(() => {
+      void doSearch(value);
+    }, 350);
+  };
+
+  // P0-5: request lama di-abort + respons basi (seq kadaluarsa) diabaikan.
+  const doSearch = async (value: string) => {
     const trimmed = value.trim();
 
     if (trimmed.length === 0) {
@@ -27,10 +46,19 @@ export default function SearchBar({ suggestions = [], align = 'center' }: { sugg
       return [];
     }
 
+    searchController.current?.abort();
+    const controller = new AbortController();
+    searchController.current = controller;
+    const seq = ++searchSeq.current;
+
     setLoading(true);
     try {
-      const res = await fetch(`/api/products?q=${encodeURIComponent(trimmed)}&limit=6&page=1`);
+      const res = await fetch(`/api/products?q=${encodeURIComponent(trimmed)}&limit=6&page=1`, {
+        signal: controller.signal,
+      });
+      if (seq !== searchSeq.current) return [];
       const data = await res.json();
+      if (seq !== searchSeq.current) return [];
       const products: Product[] = Array.isArray(data.products) ? data.products : [];
 
       let finalProducts: Product[];
@@ -46,6 +74,8 @@ export default function SearchBar({ suggestions = [], align = 'center' }: { sugg
       enrichWithMeta(finalProducts);
       return finalProducts;
     } catch (err) {
+      // Request yang dibatalkan / respons basi: diam, jangan timpa hasil terbaru.
+      if (controller.signal.aborted || seq !== searchSeq.current) return [];
       console.error('[SearchBar] fetch error:', err);
       const { filterStaticProducts } = await import('@/lib/products');
       const fallback = filterStaticProducts(trimmed) as unknown as Product[];
@@ -53,8 +83,15 @@ export default function SearchBar({ suggestions = [], align = 'center' }: { sugg
       setIsOpen(true);
       return fallback;
     } finally {
-      setLoading(false);
+      if (seq === searchSeq.current) setLoading(false);
     }
+  };
+
+  // Submit form + tombol saran: user sudah settle → langsung tanpa debounce.
+  const runSearch = (value: string) => {
+    setQuery(value);
+    if (debounceTimer.current) clearTimeout(debounceTimer.current);
+    return doSearch(value);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -109,7 +146,7 @@ export default function SearchBar({ suggestions = [], align = 'center' }: { sugg
           aria-label="Cari produk skincare"
           autoComplete="off"
           value={query}
-          onChange={(e) => runSearch(e.target.value)}
+          onChange={(e) => handleChange(e.target.value)}
           onFocus={() => query && results.length > 0 && setIsOpen(true)}
           className="w-full border-0 outline-0 bg-transparent text-ink text-base placeholder:text-[#9aa39d]"
         />
