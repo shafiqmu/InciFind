@@ -168,39 +168,37 @@ export default function Home() {
           ))}
         </div>
 
-        <div className="relative overflow-hidden my-[90px] rounded-[24px] border border-pine-200 bg-[#e7eee4]">
-          <div className="grid md:grid-cols-[1.1fr_0.9fr] items-center">
-            <div className="relative z-[2] px-6 py-[52px] md:p-[52px]">
-              <span className="text-pine-700 text-xs font-extrabold tracking-[0.14em] uppercase">
-                Jadikan skincare lebih transparan
-              </span>
-              <h2 className="mt-[15px] mb-3 font-serif text-pine-900 text-[34px] md:text-[42px] tracking-[-0.05em] leading-[1.05]">
-                Mulai Cari dan Pahami Produk Skincare-mu.
-              </h2>
-              <p className="max-w-[480px] text-ink-soft text-[13px] leading-[1.6]">
-                Mulai cari, pelajari, dan pahami produk skincare dengan informasi
-                yang bisa kamu percaya.
-              </p>
-              <Link
-                href="/search"
-                className="mt-[22px] inline-flex items-center gap-2 rounded-full bg-pine-800 px-5 py-3 text-white text-[13px] font-bold transition-all hover:bg-pine-700"
-              >
-                Mulai Sekarang
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M7 17 17 7"></path>
-                  <path d="M7 7h10v10"></path>
-                </svg>
-              </Link>
-            </div>
-            <div className="relative min-h-[220px] md:min-h-[320px]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/home/cta.jpg"
-                alt="Daun hijau"
-                loading="lazy"
-                className="absolute inset-0 w-full h-full object-cover md:rounded-r-[24px]"
-              />
-            </div>
+        <div className="relative overflow-hidden my-[90px] rounded-[24px] border border-pine-200">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/home/cta.jpg"
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-[#eef5ed] via-[#eef5ed]/80 to-[#eef5ed]/10" />
+          <div className="relative z-[2] px-6 py-[52px] md:p-[52px] max-w-[640px]">
+            <span className="text-pine-700 text-xs font-extrabold tracking-[0.14em] uppercase">
+              Jadikan skincare lebih transparan
+            </span>
+            <h2 className="mt-[15px] mb-3 font-serif text-pine-900 text-[34px] md:text-[42px] tracking-[-0.05em] leading-[1.05]">
+              Mulai Cari dan Pahami Produk Skincare-mu.
+            </h2>
+            <p className="max-w-[480px] text-ink-soft text-[13px] leading-[1.6]">
+              Mulai cari, pelajari, dan pahami produk skincare dengan informasi
+              yang bisa kamu percaya.
+            </p>
+            <Link
+              href="/search"
+              className="mt-[22px] inline-flex items-center gap-2 rounded-full bg-pine-800 px-5 py-3 text-white text-[13px] font-bold transition-all hover:bg-pine-700"
+            >
+              Mulai Sekarang
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M7 17 17 7"></path>
+                <path d="M7 7h10v10"></path>
+              </svg>
+            </Link>
           </div>
         </div>
       </section>
