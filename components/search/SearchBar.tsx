@@ -10,9 +10,9 @@ interface Suggestion {
   q: string;
 }
 
-export default function SearchBar({ suggestions = [], align = 'center' }: { suggestions?: Suggestion[]; align?: 'start' | 'center' }) {
+export default function SearchBar({ suggestions = [], align = 'center', initial = '' }: { suggestions?: Suggestion[]; align?: 'start' | 'center'; initial?: string }) {
   const router = useRouter();
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(initial);
   const [results, setResults] = useState<Product[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -87,20 +87,17 @@ export default function SearchBar({ suggestions = [], align = 'center' }: { sugg
     }
   };
 
-  // Submit form + tombol saran: user sudah settle → langsung tanpa debounce.
-  const runSearch = (value: string) => {
-    setQuery(value);
-    if (debounceTimer.current) clearTimeout(debounceTimer.current);
-    return doSearch(value);
-  };
-
+  // Enter → halaman hasil (user pilih sendiri, jangan judi produk pertama)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!query.trim()) return;
-    const found = results.length > 0 ? results : await runSearch(query);
-    if (found.length > 0 && found[0].slug) {
-      router.push(`/products/${found[0].slug}`);
-    }
+    if (debounceTimer.current) clearTimeout(debounceTimer.current);
+    router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+  };
+
+  const goSearchPage = (value: string) => {
+    if (!value.trim()) return;
+    router.push(`/search?q=${encodeURIComponent(value.trim())}`);
   };
 
   const initialOf = (p: Product) =>
@@ -224,7 +221,7 @@ export default function SearchBar({ suggestions = [], align = 'center' }: { sugg
             <button
               key={s.label}
               type="button"
-              onClick={() => runSearch(s.q)}
+              onClick={() => goSearchPage(s.q)}
               className="border border-pine-200 bg-white/75 text-pine-800 rounded-full px-3 py-[7px] text-xs font-semibold transition-all hover:bg-pine-100 hover:border-pine-600"
             >
               {s.label}

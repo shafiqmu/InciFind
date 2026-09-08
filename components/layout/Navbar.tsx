@@ -12,6 +12,7 @@ export default function Navbar() {
         </Link>
         <div className="flex items-center gap-4 md:gap-[34px] text-ink-soft text-[13px] md:text-sm font-semibold">
           <Link href="/" className="hover:text-pine-800 transition-colors">Beranda</Link>
+          <Link href="/brands" className="hover:text-pine-800 transition-colors">Brand</Link>
           <Link href="/#education" className="hover:text-pine-800 transition-colors">Jelajahi</Link>
           <Link href="/#footer" className="hover:text-pine-800 transition-colors">Tentang</Link>
           <span className="hidden lg:inline text-ink-muted text-[13px] font-normal">Cari aja. Tanpa login.</span>

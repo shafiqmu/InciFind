@@ -12,6 +12,7 @@ interface BrandItem {
 
 interface BrandGridProps {
   items: BrandItem[];
+  searchPlaceholder?: string;
 }
 
 const PER_PAGE = 50;
@@ -21,7 +22,7 @@ const CHUNK = 8;
  * Paginasi client-side 50/hal + search di SEMUA nama.
  * Foto diisi progresif (halaman aktif dulu) supaya tidak badai ke INKEE.
  */
-export default function BrandGrid({ items }: BrandGridProps) {
+export default function BrandGrid({ items, searchPlaceholder = 'Cari produk brand ini...' }: BrandGridProps) {
   const [q, setQ] = useState('');
   const [page, setPage] = useState(1);
   const [list, setList] = useState<BrandItem[]>(items);
@@ -105,8 +106,8 @@ export default function BrandGrid({ items }: BrandGridProps) {
         </svg>
         <input
           type="search"
-          placeholder="Cari produk brand ini..."
-          aria-label="Cari produk brand ini"
+          placeholder={searchPlaceholder}
+          aria-label={searchPlaceholder}
           value={q}
           onChange={(e) => {
             setQ(e.target.value);

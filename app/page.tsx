@@ -1,4 +1,5 @@
 import SearchBar from '@/components/search/SearchBar';
+import BrandMarquee from '@/components/home/BrandMarquee';
 
 const SUGGESTIONS = [
   { label: 'CeraVe', q: 'CeraVe' },
@@ -129,6 +130,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <BrandMarquee />
 
       {/* FEATURES */}
       <section className="w-[min(1180px,calc(100%-40px))] mx-auto grid grid-cols-2 lg:grid-cols-4 gap-4 pb-[110px]">

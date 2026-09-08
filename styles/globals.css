@@ -270,3 +270,18 @@ html {
   .serum-bottle { transform: scale(0.85); transform-origin: bottom center; }
   .cream-jar { transform: scale(0.85); transform-origin: bottom right; }
 }
+
+/* Brand marquee: loop pelan, jeda saat hover, mati bila reduced-motion */
+@keyframes incifind-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: incifind-marquee 40s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}

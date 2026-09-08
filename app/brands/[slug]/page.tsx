@@ -31,6 +31,10 @@ export default async function BrandPage({ params }: BrandPageProps) {
           Beranda
         </Link>
         <span className="text-ink-muted">/</span>
+        <Link href="/brands" className="text-ink-soft hover:text-pine-800">
+          Semua brand
+        </Link>
+        <span className="text-ink-muted">/</span>
         <span className="text-ink">{brand.name}</span>
       </nav>
 
