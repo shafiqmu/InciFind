@@ -8,8 +8,10 @@ import { matchIngredients } from '../../../lib/match-ingredients';
 import { ingredientsReference } from '../../../lib/ingredients-reference';
 import ProductHero from '../../../components/hero/ProductHero';
 import FormulaAnalysis from '../../../components/formula/FormulaAnalysis';
+import KeyIngredients from '../../../components/formula/KeyIngredients';
 import InciList from '../../../components/inci-list/InciList';
 import ProductDisclaimer from '../../../components/disclaimer/ProductDisclaimer';
+import { AI_LIMITATIONS } from '../../../lib/disclosure-text';
 
 interface ProductPageProps {
   params: { slug: string };
@@ -77,6 +79,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     const short = riskText(ingredientName) || context || truncate(longDescription || '') || undefined;
     return {
       name: ingredientName,
+      danger: warnings.some((w) => w.ingredient === ingredientName),
       badges,
       context,
       functions: funcMap[ingredientName] || [],
@@ -101,10 +104,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     },
     bahanUtama: formula.keyIngredients.map((k) => k.name),
     perhatian: warnings.map((w) => w.ingredient),
-    keterbatasan: [
-      'Konsentrasi pasti bahan tidak tersedia',
-      'pH produk tidak tersedia',
-    ],
+    keterbatasan: AI_LIMITATIONS,
   });
 
   return (
@@ -120,7 +120,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
         name={product.name || 'Produk'}
         brand={product.brand || 'Merek tidak dikenal'}
         category={product.category || 'Produk'}
-        description={product.description || 'Belum ada deskripsi'}
         imageUrl={product.imageUrl || ''}
         ingredientCount={(product.inciList || []).length}
       />
@@ -139,15 +138,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
           }))}
           aiKesimpulan={ai?.kesimpulan || null}
           aiCatatan={ai?.catatan || null}
-          limitations={[
-            'Konsentrasi pasti bahan tidak tersedia',
-            'pH produk tidak tersedia',
-          ]}
+          limitations={AI_LIMITATIONS}
         />
       </section>
 
-      {/* WARNINGS + INFO */}
-      <section className="grid md:grid-cols-2 gap-4 mb-[55px]">
+      {/* BAHAN UTAMA (shortcut Rule Engine) */}
+      <KeyIngredients items={formula.keyIngredients} />
+
+      {/* WARNINGS */}
+      <section className="mb-[55px]">
         <article className="p-[22px] rounded-[20px] border bg-sun-bg border-[#f0df9c]">
           <div className="flex items-center gap-[11px] mb-[10px]">
             <div className="w-[31px] h-[31px] grid place-items-center rounded-full font-black bg-sun text-[#665015]">
@@ -177,19 +176,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
               {disclosures.length} catatan keterbatasan data — lihat detail bahan di bawah.
             </p>
           )}
-        </article>
-
-        <article className="p-[22px] rounded-[20px] border bg-[#f1f4f2] border-[#dce3de]">
-          <div className="flex items-center gap-[11px] mb-[10px]">
-            <div className="w-[31px] h-[31px] grid place-items-center rounded-full font-black bg-[#dce6df] text-pine-800">
-              i
-            </div>
-            <h3 className="text-sm font-bold">Keterbatasan Data</h3>
-          </div>
-          <p className="pl-[42px] text-ink-soft text-[13px] leading-[1.6]">
-            Info bahan berdasarkan data produk publik yang tersedia. Formula bisa berubah
-            tergantung wilayah, versi produk, atau waktu. Selalu cek kemasan terbaru.
-          </p>
         </article>
       </section>
 

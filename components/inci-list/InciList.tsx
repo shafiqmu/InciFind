@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import InciItem from './InciItem';
 
 interface InciListProps {
   ingredients: Array<{
     name: string;
-    badges?: Array<{ label: string; category: string }>;
+    danger?: boolean;
     context?: string;
     functions?: string[];
     short?: string;
@@ -14,8 +14,37 @@ interface InciListProps {
   }>;
 }
 
+export function inciAnchor(name: string): string {
+  const slug = name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return `inci-${slug}`;
+}
+
+/**
+ * Clean INCI Sheet: daftar tipografi nama bahan + search (nama/fungsi).
+ * Menerima event 'inci-focus' dari section Bahan Utama → buka + scroll ke baris.
+ */
 export default function InciList({ ingredients }: InciListProps) {
   const [searchTerm, setSearchTerm] = useState('');
+  const [openName, setOpenName] = useState<string | null>(null);
+
+  useEffect(() => {
+    const onFocus = (e: Event) => {
+      const name = (e as CustomEvent<string>).detail;
+      if (!name) return;
+      setSearchTerm('');
+      setOpenName(name);
+      setTimeout(() => {
+        document
+          .getElementById(inciAnchor(name))
+          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 60);
+    };
+    window.addEventListener('inci-focus', onFocus);
+    return () => window.removeEventListener('inci-focus', onFocus);
+  }, []);
 
   const q = searchTerm.toLowerCase();
   const filtered = ingredients.filter(
@@ -33,7 +62,7 @@ export default function InciList({ ingredients }: InciListProps) {
             Bahan (INCI)
           </h2>
           <p className="text-ink-soft text-sm mt-1">
-            {filtered.length} dari {ingredients.length} bahan — cari atau buka baris untuk info lebih lanjut.
+            {ingredients.length} bahan — ketuk baris untuk detail.
           </p>
         </div>
         <label className="w-full md:w-[300px] h-11 flex items-center px-[14px] bg-white border border-line rounded-xl shrink-0">
@@ -43,33 +72,33 @@ export default function InciList({ ingredients }: InciListProps) {
           </svg>
           <input
             type="search"
-            placeholder="Cari bahan..."
+            placeholder="Cari bahan atau fungsi..."
+            aria-label="Cari bahan atau fungsi"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full border-0 outline-0 text-ink bg-transparent text-[13px]"
+            className="w-full border-0 outline-0 text-ink bg-transparent text-base"
           />
         </label>
       </div>
 
       <div className="overflow-hidden bg-white border border-line rounded-[24px] shadow-[0_4px_16px_rgba(23,60,42,0.05)]">
-        <div className="hidden lg:grid grid-cols-[1.3fr_1fr_1fr_45px] px-[22px] py-4 bg-[#f8faf8] border-b border-line text-ink-muted text-xs font-extrabold uppercase tracking-[0.08em]">
-          <div>Bahan</div>
-          <div>Fungsi</div>
-          <div>Deskripsi</div>
-          <div></div>
-        </div>
         <div>
           {filtered.length > 0 ? (
-            filtered.map((ingredient, idx) => (
-              <InciItem
-                key={idx}
-                name={ingredient.name}
-                badges={ingredient.badges}
-                context={ingredient.context}
-                functions={ingredient.functions}
-                short={ingredient.short}
-                longDescription={ingredient.longDescription}
-              />
+            filtered.map((ingredient) => (
+              <div key={ingredient.name} id={inciAnchor(ingredient.name)} className="scroll-mt-24">
+                <InciItem
+                  name={ingredient.name}
+                  danger={ingredient.danger}
+                  context={ingredient.context}
+                  functions={ingredient.functions}
+                  short={ingredient.short}
+                  longDescription={ingredient.longDescription}
+                  open={openName === ingredient.name}
+                  onToggle={() =>
+                    setOpenName((prev) => (prev === ingredient.name ? null : ingredient.name))
+                  }
+                />
+              </div>
             ))
           ) : (
             <p className="p-[22px] text-ink-muted text-center text-[13px] italic">
