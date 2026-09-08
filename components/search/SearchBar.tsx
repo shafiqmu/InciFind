@@ -160,7 +160,7 @@ export default function SearchBar({ suggestions = [], align = 'center', initial 
       </form>
 
       {isOpen && results.length > 0 && (
-        <div className="absolute top-[calc(100%+12px)] left-0 right-0 bg-white border border-line rounded-[22px] shadow-[0_18px_50px_rgba(23,60,42,0.09)] overflow-hidden z-50 text-left">
+        <div className="absolute top-[calc(100%+12px)] left-0 right-0 bg-white border border-line rounded-[22px] shadow-[0_18px_50px_rgba(23,60,42,0.09)] overflow-hidden z-[150] text-left">
           <div className="px-[18px] py-[15px] border-b border-line text-ink-muted text-xs font-bold uppercase tracking-[0.08em]">
             Hasil pencarian
           </div>
@@ -206,7 +206,7 @@ export default function SearchBar({ suggestions = [], align = 'center', initial 
         </div>
       )}
       {isOpen && query && results.length === 0 && !loading && (
-        <div className="absolute top-[calc(100%+12px)] left-0 right-0 bg-white border border-line rounded-[22px] shadow-[0_18px_50px_rgba(23,60,42,0.09)] overflow-hidden z-50 text-left">
+        <div className="absolute top-[calc(100%+12px)] left-0 right-0 bg-white border border-line rounded-[22px] shadow-[0_18px_50px_rgba(23,60,42,0.09)] overflow-hidden z-[150] text-left">
           <div className="px-[18px] py-[15px] border-b border-line text-ink-muted text-xs font-bold uppercase tracking-[0.08em]">
             Hasil pencarian
           </div>

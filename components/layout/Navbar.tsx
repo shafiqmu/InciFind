@@ -14,8 +14,8 @@ export default function Navbar() {
           <Link href="/" className="hover:text-pine-800 transition-colors">Beranda</Link>
           <Link href="/brands" className="hover:text-pine-800 transition-colors">Brand</Link>
           <Link href="/articles" className="hover:text-pine-800 transition-colors">Artikel</Link>
-          <Link href="/#education" className="hover:text-pine-800 transition-colors">Jelajahi</Link>
-          <Link href="/#footer" className="hover:text-pine-800 transition-colors">Tentang</Link>
+          <Link href="/#education" className="hidden sm:inline hover:text-pine-800 transition-colors">Jelajahi</Link>
+          <Link href="/#footer" className="hidden sm:inline hover:text-pine-800 transition-colors">Tentang</Link>
           <span className="hidden lg:inline text-ink-muted text-[13px] font-normal">Cari aja. Tanpa login.</span>
         </div>
       </div>

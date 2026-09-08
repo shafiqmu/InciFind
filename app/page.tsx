@@ -177,7 +177,7 @@ export default function Home() {
             loading="lazy"
             className="absolute inset-0 w-full h-full object-cover"
           />
-          <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-[#eef5ed] via-[#eef5ed]/80 to-[#eef5ed]/10" />
+          <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-[#eef5ed] via-[#eef5ed]/85 to-[#eef5ed]/30 md:bg-gradient-to-r md:via-[#eef5ed]/80 md:to-[#eef5ed]/10" />
           <div className="relative z-[2] px-6 py-[52px] md:p-[52px] max-w-[640px]">
             <span className="text-pine-700 text-xs font-extrabold tracking-[0.14em] uppercase">
               Jadikan skincare lebih transparan
