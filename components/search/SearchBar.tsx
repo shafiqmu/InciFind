@@ -219,7 +219,7 @@ export default function SearchBar({ suggestions = [], align = 'center' }: { sugg
 
       {suggestions.length > 0 && (
         <div className={`flex items-center flex-wrap gap-2 mt-[18px] ${align === 'start' ? 'justify-start' : 'justify-center'}`}>
-          <span className="text-ink-muted text-[13px]">Coba cari:</span>
+          <span className="text-ink font-medium text-[13px] [text-shadow:0_1px_10px_rgba(247,248,243,1)]">Coba cari:</span>
           {suggestions.map((s) => (
             <button
               key={s.label}

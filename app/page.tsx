@@ -89,7 +89,7 @@ export default function Home() {
             alt=""
             className="absolute inset-0 w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-mist/30 via-mist/5 to-mist/65" />
+          <div className="absolute inset-0 bg-gradient-to-b from-mist/45 via-mist/15 to-mist/75" />
         </div>
         <div className="relative w-[min(1180px,calc(100%-40px))] mx-auto grid lg:grid-cols-[1.05fr_0.95fr] gap-8 lg:gap-10 items-center lg:min-h-[650px] py-12 lg:py-[80px]">
           <div className="relative text-left">
@@ -108,7 +108,7 @@ export default function Home() {
               Skincare-mu.
             </h1>
 
-            <p className="max-w-[520px] text-ink-soft text-[16px] md:text-[17px] leading-[1.7] mb-10 [text-shadow:0_1px_12px_rgba(247,248,243,0.95)]">
+            <p className="max-w-[520px] text-ink font-medium text-[16px] md:text-[17px] lg:font-normal lg:text-ink-soft leading-[1.7] mb-10 [text-shadow:0_1px_14px_rgba(247,248,243,1),0_0_8px_rgba(247,248,243,1)] lg:[text-shadow:none]">
               Cari produk skincare apa pun dan temukan daftar bahan lengkap,
               bahan aktif, dan insight simpel. Tanpa login. Cukup tahu.
             </p>
