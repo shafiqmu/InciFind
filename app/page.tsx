@@ -1,5 +1,5 @@
 import SearchBar from '@/components/search/SearchBar';
-import BrandMarquee from '@/components/home/BrandMarquee';
+import BrandShowcase from '@/components/home/BrandShowcase';
 
 const SUGGESTIONS = [
   { label: 'CeraVe', q: 'CeraVe' },
@@ -131,25 +131,7 @@ export default function Home() {
         </div>
       </section>
 
-      <BrandMarquee />
-
-      {/* FEATURES */}
-      <section className="w-[min(1180px,calc(100%-40px))] mx-auto grid grid-cols-2 lg:grid-cols-4 gap-4 pb-[110px]">
-        {FEATURES.map((f) => (
-          <article
-            key={f.title}
-            className="px-5 py-[30px] text-center bg-white/65 border border-line/80 rounded-3xl transition-all hover:-translate-y-1 hover:shadow-[0_4px_16px_rgba(23,60,42,0.05)]"
-          >
-            <div className="w-14 h-14 grid place-items-center mx-auto mb-[17px] text-pine-800 bg-pine-100 rounded-full">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-[23px] h-[23px]">
-                {f.icon}
-              </svg>
-            </div>
-            <h3 className="mb-2 text-[15px] font-bold">{f.title}</h3>
-            <p className="text-ink-soft text-[13px] leading-[1.6]">{f.desc}</p>
-          </article>
-        ))}
-      </section>
+      <BrandShowcase features={FEATURES} />
 
       {/* EDUCATION */}
       <section id="education" className="w-[min(1180px,calc(100%-40px))] mx-auto py-20 border-t border-line scroll-mt-20">
