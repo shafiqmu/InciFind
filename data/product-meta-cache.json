@@ -1,0 +1,14 @@
+{
+  "cerave-cleanser": {
+    "imageUrl": "https://incidecoder-content.storage.googleapis.com/9b144c7b-0658-45c1-a89e-d72eba1378a6/products/cerave-cleanser/cerave-cleanser_front_photo_original.jpeg",
+    "brand": "CeraVe"
+  },
+  "cerave-serum": {
+    "imageUrl": "https://incidecoder-content.storage.googleapis.com/f64ee012-dbaa-45f4-b4b4-2df0e66723bf/products/cerave-serum/cerave-serum_front_photo_original.jpeg",
+    "brand": "CeraVe"
+  },
+  "cerave-lotion": {
+    "imageUrl": "https://incidecoder-content.storage.googleapis.com/97144176-4b50-43d1-bb13-a42e7f029a2f/products/cerave-lotion/cerave-lotion_front_photo_original.jpeg",
+    "brand": "CeraVe"
+  }
+}

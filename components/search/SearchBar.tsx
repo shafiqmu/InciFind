@@ -43,6 +43,7 @@ export default function SearchBar({ suggestions = [], align = 'center' }: { sugg
 
       setResults(finalProducts);
       setIsOpen(true);
+      enrichWithMeta(finalProducts);
       return finalProducts;
     } catch (err) {
       console.error('[SearchBar] fetch error:', err);
@@ -67,6 +68,30 @@ export default function SearchBar({ suggestions = [], align = 'center' }: { sugg
 
   const initialOf = (p: Product) =>
     (p.brand?.[0] || p.name?.[0] || '?').toUpperCase();
+
+  // Enrichment ringan: gambar + brand nyusul setelah hasil tampil.
+  // Merge per slug → respons basi tidak merusak hasil query terbaru.
+  const enrichWithMeta = (items: Product[]) => {
+    const slugs = items.map((p) => p.slug).filter(Boolean).join(',');
+    if (!slugs) return;
+    fetch(`/api/product-meta?slugs=${encodeURIComponent(slugs)}`)
+      .then((r) => r.json())
+      .then((d) => {
+        const meta = (d?.meta || {}) as Record<string, { imageUrl?: string; brand?: string }>;
+        setResults((prev) =>
+          prev.map((p) => {
+            const m = meta[p.slug];
+            if (!m) return p;
+            return {
+              ...p,
+              brand: p.brand || m.brand || p.brand,
+              imageUrl: (p as Product).imageUrl || m.imageUrl || (p as Product).imageUrl,
+            };
+          })
+        );
+      })
+      .catch(() => {});
+  };
 
   return (
     <div className="relative">
@@ -115,8 +140,22 @@ export default function SearchBar({ suggestions = [], align = 'center' }: { sugg
                 setIsOpen(false);
               }}
             >
-              <div className="w-12 h-[58px] grid place-items-center shrink-0 bg-[linear-gradient(145deg,#edf5ed,#f7f2e9)] rounded-xl text-pine-800 font-extrabold text-lg">
-                {initialOf(product)}
+              <div className="relative w-12 h-[58px] shrink-0 overflow-hidden bg-[linear-gradient(145deg,#edf5ed,#f7f2e9)] rounded-xl">
+                <div className="absolute inset-0 grid place-items-center text-pine-800 font-extrabold text-lg">
+                  {initialOf(product)}
+                </div>
+                {product.imageUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={product.imageUrl}
+                    alt=""
+                    loading="lazy"
+                    className="absolute inset-0 w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                ) : null}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="text-ink text-sm font-bold whitespace-nowrap overflow-hidden text-ellipsis">
