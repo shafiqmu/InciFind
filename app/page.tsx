@@ -89,22 +89,17 @@ export default function Home() {
             alt=""
             className="absolute inset-0 w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-mist/60 via-mist/25 to-mist/85" />
+          <div className="absolute inset-0 bg-gradient-to-b from-mist/30 via-mist/5 to-mist/65" />
         </div>
         <div className="relative w-[min(1180px,calc(100%-40px))] mx-auto grid lg:grid-cols-[1.05fr_0.95fr] gap-8 lg:gap-10 items-center lg:min-h-[650px] py-12 lg:py-[80px]">
           <div className="relative text-left">
-            {/* Scrim lembut khusus mobile/tablet: teks tajam, foto tetap nongol */}
-            <div
-              aria-hidden="true"
-              className="absolute -inset-x-4 -inset-y-6 lg:hidden bg-mist/60 blur-2xl rounded-[32px]"
-            />
             <div className="relative">
             <div className="inline-flex items-center gap-2 mb-[22px] text-pine-800 text-xs font-extrabold tracking-[0.14em] uppercase">
               <span className="w-[7px] h-[7px] bg-pine-600 rounded-full" />
               Bahan skincare, dibuat simpel
             </div>
 
-            <h1 className="max-w-[640px] font-serif text-[clamp(48px,6vw,84px)] leading-[0.95] tracking-[-0.065em] text-pine-900 mb-7">
+            <h1 className="max-w-[640px] font-serif text-[clamp(48px,6vw,84px)] leading-[0.95] tracking-[-0.065em] text-pine-900 mb-7 [text-shadow:0_1px_18px_rgba(247,248,243,0.95),0_0_6px_rgba(247,248,243,0.9)]">
               Tahu Apa{' '}
               <em className="not-italic text-pine-700 relative">
                 Isi
@@ -113,7 +108,7 @@ export default function Home() {
               Skincare-mu.
             </h1>
 
-            <p className="max-w-[520px] text-ink-soft text-[16px] md:text-[17px] leading-[1.7] mb-10">
+            <p className="max-w-[520px] text-ink-soft text-[16px] md:text-[17px] leading-[1.7] mb-10 [text-shadow:0_1px_12px_rgba(247,248,243,0.95)]">
               Cari produk skincare apa pun dan temukan daftar bahan lengkap,
               bahan aktif, dan insight simpel. Tanpa login. Cukup tahu.
             </p>
